@@ -941,14 +941,14 @@ namespace Cake.Common.Tools.DotNet
         }
 
         /// <summary>
-        /// Determines whether the specified NuGet source exists.
+        /// Lists the NuGet sources.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="format">The output format. Accepts two values: detailed (the default) and short.</param>
-        /// <returns>Whether the specified NuGet source exists.</returns>
+        /// <returns>Unparsed string of all listed sources.</returns>
         /// <example>
         /// <code>
-        /// var exists = DotNetNuGetHasSource("example");
+        /// var sources = DotNetNuGetListSource();
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -960,20 +960,20 @@ namespace Cake.Common.Tools.DotNet
         }
 
         /// <summary>
-        /// Determines whether the specified NuGet source exists.
+        /// Lists the NuGet sources.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="format">The output format. Accepts two values: detailed (the default) and short.</param>
         /// <param name="settings">The settings.</param>
-        /// <returns>Whether the specified NuGet source exists.</returns>
+        /// <returns>Unparsed string of all listed sources.</returns>
         /// <example>
         /// <code>
-        /// var settings = new DotNetNuGetSourceSettings
+        /// var settings = new DotNetNuGetListSourceSettings
         /// {
         ///     ConfigFile = "NuGet.config"
         /// };
         ///
-        /// var exists = DotNetNuGetHasSource("example", settings);
+        /// var sources = DotNetNuGetListSource("short", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
