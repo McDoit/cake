@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -29,21 +29,6 @@ using Cake.Common.Tools.DotNet.Workload.Restore;
 using Cake.Common.Tools.DotNet.Workload.Search;
 using Cake.Common.Tools.DotNet.Workload.Uninstall;
 using Cake.Common.Tools.DotNet.Workload.Update;
-using Cake.Common.Tools.DotNetCore.Build;
-using Cake.Common.Tools.DotNetCore.BuildServer;
-using Cake.Common.Tools.DotNetCore.Clean;
-using Cake.Common.Tools.DotNetCore.Execute;
-using Cake.Common.Tools.DotNetCore.MSBuild;
-using Cake.Common.Tools.DotNetCore.NuGet.Delete;
-using Cake.Common.Tools.DotNetCore.NuGet.Push;
-using Cake.Common.Tools.DotNetCore.NuGet.Source;
-using Cake.Common.Tools.DotNetCore.Pack;
-using Cake.Common.Tools.DotNetCore.Publish;
-using Cake.Common.Tools.DotNetCore.Restore;
-using Cake.Common.Tools.DotNetCore.Run;
-using Cake.Common.Tools.DotNetCore.Test;
-using Cake.Common.Tools.DotNetCore.Tool;
-using Cake.Common.Tools.DotNetCore.VSTest;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -135,7 +120,7 @@ namespace Cake.Common.Tools.DotNet
                 settings = new DotNetExecuteSettings();
             }
 
-            var executor = new DotNetCoreExecutor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var executor = new DotNetExecutor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             executor.Execute(assemblyPath, arguments, settings);
         }
 
@@ -238,7 +223,7 @@ namespace Cake.Common.Tools.DotNet
                 settings = new DotNetRestoreSettings();
             }
 
-            var restorer = new DotNetCoreRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
+            var restorer = new DotNetRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
             restorer.Restore(root, settings);
         }
 
@@ -293,7 +278,7 @@ namespace Cake.Common.Tools.DotNet
                 settings = new DotNetBuildSettings();
             }
 
-            var builder = new DotNetCoreBuilder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var builder = new DotNetBuilder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             builder.Build(project, settings);
         }
 
@@ -348,7 +333,7 @@ namespace Cake.Common.Tools.DotNet
                 settings = new DotNetPublishSettings();
             }
 
-            var publisher = new DotNetCorePublisher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var publisher = new DotNetPublisher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             publisher.Publish(project, settings);
         }
 
@@ -515,7 +500,7 @@ namespace Cake.Common.Tools.DotNet
                 settings = new DotNetTestSettings();
             }
 
-            var tester = new DotNetCoreTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var tester = new DotNetTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             tester.Test(project, arguments, settings);
         }
 
@@ -570,7 +555,7 @@ namespace Cake.Common.Tools.DotNet
                 settings = new DotNetCleanSettings();
             }
 
-            var cleaner = new DotNetCoreCleaner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var cleaner = new DotNetCleaner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             cleaner.Clean(project, settings);
         }
 
@@ -710,7 +695,7 @@ namespace Cake.Common.Tools.DotNet
                 settings = new DotNetNuGetDeleteSettings();
             }
 
-            var nugetDeleter = new DotNetCoreNuGetDeleter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var nugetDeleter = new DotNetNuGetDeleter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             nugetDeleter.Delete(packageName, packageVersion, settings);
         }
 
@@ -771,7 +756,7 @@ namespace Cake.Common.Tools.DotNet
                 settings = new DotNetNuGetPushSettings();
             }
 
-            var restorer = new DotNetCoreNuGetPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var restorer = new DotNetNuGetPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             restorer.Push(packageFilePath?.FullPath, settings);
         }
 
@@ -805,7 +790,7 @@ namespace Cake.Common.Tools.DotNet
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             sourcer.AddSource(name, settings);
         }
 
@@ -853,7 +838,7 @@ namespace Cake.Common.Tools.DotNet
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             sourcer.DisableSource(name, settings ?? new DotNetNuGetSourceSettings());
         }
 
@@ -901,7 +886,7 @@ namespace Cake.Common.Tools.DotNet
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             sourcer.EnableSource(name, settings ?? new DotNetNuGetSourceSettings());
         }
 
@@ -951,8 +936,58 @@ namespace Cake.Common.Tools.DotNet
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             return sourcer.HasSource(name, settings ?? new DotNetNuGetSourceSettings());
+        }
+
+        /// <summary>
+        /// Lists the NuGet sources.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="format">The output format. Accepts two values: detailed (the default) and short.</param>
+        /// <returns>Unparsed string of all listed sources.</returns>
+        /// <example>
+        /// <code>
+        /// var sources = DotNetNuGetListSource();
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+        public static bool DotNetNuGetListSource(this ICakeContext context, string format = "detailed")
+        {
+            return context.DotNetNuGetListSource(format, null);
+        }
+
+        /// <summary>
+        /// Lists the NuGet sources.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="format">The output format. Accepts two values: detailed (the default) and short.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>Unparsed string of all listed sources.</returns>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetNuGetListSourceSettings
+        /// {
+        ///     ConfigFile = "NuGet.config"
+        /// };
+        ///
+        /// var sources = DotNetNuGetListSource("short", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+        public static bool DotNetNuGetListSource(this ICakeContext context, string format = "detailed", DotNetNuGetListSourceSettings settings = null)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            return sourcer.ListSource(format, settings ?? new DotNetNuGetListSourceSettings());
         }
 
         /// <summary>
@@ -999,7 +1034,7 @@ namespace Cake.Common.Tools.DotNet
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             sourcer.RemoveSource(name, settings ?? new DotNetNuGetSourceSettings());
         }
 
@@ -1033,7 +1068,7 @@ namespace Cake.Common.Tools.DotNet
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             sourcer.UpdateSource(name, settings);
         }
 
@@ -1087,7 +1122,7 @@ namespace Cake.Common.Tools.DotNet
                 settings = new DotNetPackSettings();
             }
 
-            var packer = new DotNetCorePacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var packer = new DotNetPacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             packer.Pack(project, settings);
         }
 
@@ -1178,7 +1213,7 @@ namespace Cake.Common.Tools.DotNet
                 settings = new DotNetRunSettings();
             }
 
-            var runner = new DotNetCoreRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var runner = new DotNetRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(project, arguments, settings);
         }
 
@@ -1310,7 +1345,7 @@ namespace Cake.Common.Tools.DotNet
                 settings = new DotNetMSBuildSettings();
             }
 
-            var builder = new DotNetCoreMSBuildBuilder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var builder = new DotNetMSBuildBuilder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             builder.Build(projectOrDirectory, settings);
         }
 
@@ -1423,7 +1458,7 @@ namespace Cake.Common.Tools.DotNet
                 settings = new DotNetVSTestSettings();
             }
 
-            var tester = new DotNetCoreVSTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var tester = new DotNetVSTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             tester.Test(testFiles, settings);
         }
 
@@ -1561,7 +1596,7 @@ namespace Cake.Common.Tools.DotNet
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var runner = new DotNetCoreToolRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var runner = new DotNetToolRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
 
             runner.Execute(projectPath, command, arguments, settings);
         }
@@ -1608,7 +1643,7 @@ namespace Cake.Common.Tools.DotNet
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var buildServer = new DotNetCoreBuildServer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            var buildServer = new DotNetBuildServer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
 
             buildServer.Shutdown(settings ?? new DotNetBuildServerShutdownSettings());
         }
