@@ -941,6 +941,56 @@ namespace Cake.Common.Tools.DotNet
         }
 
         /// <summary>
+        /// Determines whether the specified NuGet source exists.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="format">The output format. Accepts two values: detailed (the default) and short.</param>
+        /// <returns>Whether the specified NuGet source exists.</returns>
+        /// <example>
+        /// <code>
+        /// var exists = DotNetNuGetHasSource("example");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+        public static bool DotNetNuGetListSource(this ICakeContext context, string format = "detailed")
+        {
+            return context.DotNetNuGetListSource(format, null);
+        }
+
+        /// <summary>
+        /// Determines whether the specified NuGet source exists.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="format">The output format. Accepts two values: detailed (the default) and short.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>Whether the specified NuGet source exists.</returns>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetNuGetSourceSettings
+        /// {
+        ///     ConfigFile = "NuGet.config"
+        /// };
+        ///
+        /// var exists = DotNetNuGetHasSource("example", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+        public static bool DotNetNuGetListSource(this ICakeContext context, string format = "detailed", DotNetNuGetListSourceSettings settings = null)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            return sourcer.ListSource(format, settings ?? new DotNetNuGetListSourceSettings());
+        }
+
+        /// <summary>
         /// Remove the specified NuGet source.
         /// </summary>
         /// <param name="context">The context.</param>
